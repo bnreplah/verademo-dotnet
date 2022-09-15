@@ -4,6 +4,24 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 # This is an example of using VeraDemoDotNet test application with the Veracode Static Pipeline scanner.  A Veracode subscription is required.
 
+# Default template for yaml azure pipeline
+# trigger
+# - main
+#
+# pool:
+#   vmimage: ubuntu-latest
+#
+# steps:
+# - script: echo Hello, World!
+#   displayName:'Run a one line script'
+#
+# - script: |
+#   echo Add other tasks to build, test, and deploy your project
+#   echo see https://aka.ms/yml for more details
+#   displayName: 'Run a multi line script'
+#
+
+
 trigger:
 - main
 
