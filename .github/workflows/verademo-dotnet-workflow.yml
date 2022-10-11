@@ -91,5 +91,12 @@ jobs:
       with:
         path: '${{ github.workspace }}/artifact'
     
-    - run: ls ${{ github.workspace }}/artifact/
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.0
+      with:
+        # Artifact name
+        name: VerademoZip # optional
+        # Destination path
+        path: "./Verademo-dotnet.zip"  # optional
+   
     
