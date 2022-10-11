@@ -91,5 +91,5 @@ jobs:
       with:
         path: '${{ github.workspace }}/artifact'
     
-    - run: ls ../workspace/artifact/
+    - run: ls ${{ github.workspace }}/artifact/
     
