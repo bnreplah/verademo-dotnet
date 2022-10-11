@@ -47,10 +47,11 @@ jobs:
       - name: Restore Packages
         run: nuget restore Verademo-dotnet.sln
 
+# Results in an error not finding the solution files to build off, possibly due to being --no-restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore
-#      - name: Test
-#        run: dotnet test --no-restore --verbosity normal
+        run: dotnet build 
+#     - name: Test
+#       run: dotnet test --no-restore --verbosity normal
 
 
 
