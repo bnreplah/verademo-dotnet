@@ -77,4 +77,6 @@ jobs:
           path: "./_build" 
       
       - name: Package solution
-        run: zip /?
+        run: Compress-Archive -LiteralPath _build/ -DestinationPath BuildArchive.zip
+      
+      - run: ls
