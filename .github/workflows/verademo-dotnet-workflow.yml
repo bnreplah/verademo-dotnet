@@ -82,4 +82,13 @@ jobs:
           name: VerademoZip
           path: "./Verademo-dotnet.zip" 
       
-      
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out main branch
+      uses: actions/checkout@v2
+      with:
+        path: '${{ github.workspace }}/artifact'
+    
+    - run: ls ../workspace/artifact/
+    
