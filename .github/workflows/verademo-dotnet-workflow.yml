@@ -43,9 +43,6 @@ jobs:
 #      - name: Navigate to Workspace
 #        run: cd $GITHUB_WORKSPACE
 
-      # Create Build Directory
-      - name: Create Build Directory
-        run: mkdir _build
       
       # Restore dependencies to the project
       - name: Install dependencies
@@ -62,36 +59,27 @@ jobs:
 #       run: dotnet test --no-restore --verbosity normal
 
          # [DEBUG]: listing directories after MSBUILD
-      - run: ls
-      - run: ls _build/
+ 
 
       # Build the solution
       - name: Build Solution
         run: |
-          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:PackageLocation=./.. /p:DebugSymbols=true  /p:platform="Any CPU" /p:configuration="Debug" /p:PublishUrl="../_build"
+          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:PackageLocation=./.. /p:DebugSymbols=true  /p:platform="Any CPU" /p:configuration="Debug" 
       
+
+      - name: List files in the repository and zip artifact
+        run: |
+          dir ${{ github.workspace }}
+          mkdir -p ${{ github.workspace }}/artifact
+          copy Verademo-dotnet.zip ${{ github.workspace }}/artifact
+          dir ${{ github.workspace }}/artifact
       - run: ls
-      - run: ls _build/
-      
-      
-      # Upload the artifact to the _build directory
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: VerademoBundle
-          path: "./_build" 
-      
-      - name: Package solution
-        run: Compress-Archive -LiteralPath _build/ -DestinationPath BuildArchive.zip
-      
-      - run: ls
-      - run: ls _build/
       
        # Upload the artifact of the zip archive
       - name: Upload artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           name: VerademoZip
-          path: "./BuildArchive.zip" 
+          path: "./Verademo-dotnet.zip" 
       
       
