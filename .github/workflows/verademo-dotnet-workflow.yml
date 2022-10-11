@@ -8,6 +8,7 @@ on:
   
 env:
    DOTNET_VERSION: '6.0.x'
+   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   
 
 jobs:
