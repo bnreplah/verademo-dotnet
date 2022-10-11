@@ -34,8 +34,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - run: ls
       - run: dir
-#      - name: Setup NuGet
-#        uses: NuGet/setup-nuget@v1.0.2
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.2
 #      - name: Navigate to Workspace
 #        run: cd $GITHUB_WORKSPACE
       - name: Create Build Directory
@@ -44,8 +44,8 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
         
-#      - name: Restore Packages
-#        run: nuget restore Verademo-dotnet.sln
+      - name: Restore Packages
+        run: nuget restore Verademo-dotnet.sln
 
 #      - name: Build
 #        run: dotnet build --configuration Release --no-restore
