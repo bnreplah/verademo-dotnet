@@ -47,8 +47,8 @@ jobs:
       - name: Restore Packages
         run: nuget restore Verademo-dotnet.sln
 
-#      - name: Build
-#        run: dotnet build --configuration Release --no-restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 #      - name: Test
 #        run: dotnet test --no-restore --verbosity normal
 
