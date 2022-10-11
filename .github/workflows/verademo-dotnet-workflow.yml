@@ -45,16 +45,16 @@ jobs:
       - name: Restore Packages
         run: nuget restore Verademo-dotnet.sln
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+#      - name: Build
+#        run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
 
 
-#      - name: Build Solution
-#        run: |
-#          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+      - name: Build Solution
+        run: |
+          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
       
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
