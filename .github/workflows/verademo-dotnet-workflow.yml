@@ -99,4 +99,6 @@ jobs:
         # Destination path
         path: "./Verademo-dotnet.zip"  # optional
    
+    - run: ls
+    
     
