@@ -80,3 +80,12 @@ jobs:
         run: Compress-Archive -LiteralPath _build/ -DestinationPath BuildArchive.zip
       
       - run: ls
+      
+       # Upload the artifact of the zip archive
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: VerademoZip
+          path: "./BuildArchive.zip" 
+      
+      
