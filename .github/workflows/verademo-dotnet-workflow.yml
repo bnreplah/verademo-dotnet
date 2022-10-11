@@ -46,7 +46,7 @@ jobs:
         run: dotnet restore
         
       - name: Restore Packages
-        run: nuget restore *.sln
+        run: nuget restore Verademo-dotnet.sln
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
