@@ -35,9 +35,7 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
         
-      # [DEBUG]: listing directories after MSBUILD
-      - run: ls
-      - run: dir
+   
       
       # Set up NuGet to install NuGet dependencies
       - name: Setup NuGet
@@ -63,11 +61,17 @@ jobs:
 #     - name: Test
 #       run: dotnet test --no-restore --verbosity normal
 
+         # [DEBUG]: listing directories after MSBUILD
+      - run: ls
+      - run: ls _build/
 
       # Build the solution
       - name: Build Solution
         run: |
-          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Debug" /p:PublishUrl="../_build"
+      
+      
+      
       
       # Upload the artifact to the _build directory
       - name: Upload artifact
@@ -80,6 +84,7 @@ jobs:
         run: Compress-Archive -LiteralPath _build/ -DestinationPath BuildArchive.zip
       
       - run: ls
+      - run: ls _build/
       
        # Upload the artifact of the zip archive
       - name: Upload artifact
