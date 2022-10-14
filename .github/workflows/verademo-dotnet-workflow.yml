@@ -55,8 +55,8 @@ jobs:
 # Results in an error not finding the solution files to build off, possibly due to being --no-restore
 #      - name: Build
 #        run: dotnet build 
-#     - name: Test
-#       run: dotnet test --no-restore --verbosity normal
+#      - name: Test
+#        run: dotnet test --no-restore --verbosity normal
 
          # [DEBUG]: listing directories after MSBUILD
  
@@ -71,7 +71,7 @@ jobs:
         run: |
           dir ${{ github.workspace }}
           mkdir -p ${{ github.workspace }}/artifact
-          copy Verademo-dotnet.zip ${{ github.workspace }}/artifact
+          Compress-Archive -Path C:\Reference -DestinationPath C:\Archives\Draft.zip
           dir ${{ github.workspace }}/artifact
       - run: ls
       
