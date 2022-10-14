@@ -87,7 +87,7 @@ jobs:
     - name: Check out main branch
       uses: actions/checkout@v2
       with:
-        path: '${{ github.workspace }}/'
+        path: '${{ github.workspace }}/artifact'
     
     - name: Setup Java
       uses: actions/setup-java@v3.5.1
