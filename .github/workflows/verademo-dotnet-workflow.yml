@@ -98,14 +98,7 @@ jobs:
         java-version: '11'
         distribution: 'microsoft'
     
-    - name: Build scan enviornment
-      run: |
-        whaomi
-        uname -a
-        apt-get install -y curl unzip 
-        curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-        unzip pipeline-scan-LATEST.zip
-    
+
     - name: Download a Build Artifact
       uses: actions/download-artifact@v3.0.0
       with:
@@ -114,7 +107,8 @@ jobs:
         # Destination path
         path: "./Verademo-dotnet.zip"  # optional
    
-    - run: ls
+    - run: ls -la
+    - run: uname -a
     
     
 #    - name: Veracode Pipeline-Scan
