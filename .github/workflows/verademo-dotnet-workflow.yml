@@ -100,6 +100,8 @@ jobs:
     
     - name: Build scan enviornment
       run: |
+        whaomi
+        uname -a
         apt-get install -y curl unzip 
         curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         unzip pipeline-scan-LATEST.zip
