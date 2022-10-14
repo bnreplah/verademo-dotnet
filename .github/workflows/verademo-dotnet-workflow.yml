@@ -114,6 +114,8 @@ jobs:
     - run: java --version
     - run: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
     - run: unzip pipeline-scan-LATEST.zip 
+    - run: java -jar pipeline-scan.jar -vid ${{ secrets.VERACODE_API_ID }} -vkey ${{ secrets.VERACODE_API_KEY }} -f  ./Verademo-dotnet.zip 
+
 #    - name: Veracode Pipeline-Scan
 #      # You may pin to the exact commit or the version.
 #      # uses: veracode/Veracode-pipeline-scan-action@8c25cb8c06c0b2684e896b6d07048ea68ce892b5
