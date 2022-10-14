@@ -111,7 +111,6 @@ jobs:
     - run: uname -a
     - run: whoami
     - run: curl --version
-    - run: unzip --version
     - run: java --version
     
 #    - name: Veracode Pipeline-Scan
