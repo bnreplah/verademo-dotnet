@@ -70,14 +70,14 @@ jobs:
       - name: List files in the repository and zip artifact
         run: |
           dir ${{ github.workspace }}
-          Compress-Archive -Path ${{ github.workspace }} -DestinationPath Veradem-dotnet.zip
+          Compress-Archive -Path ${{ github.workspace }} -DestinationPath Verademo-dotnet.zip
       - run: ls
       
        # Upload the artifact of the zip archive
       - name: Upload artifact
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: VerademoZip
+          name: Verademo-dotnet
           path: "./Verademo-dotnet.zip" 
       
   security:
@@ -101,7 +101,7 @@ jobs:
       uses: actions/download-artifact@v3.0.0
       with:
         # Artifact name
-        name: VerademoZip # optional
+        name: Verademo-dotnet # optional
         # Destination path
         path: "./Verademo-dotnet.zip"  # optional
    
