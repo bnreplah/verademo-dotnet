@@ -108,7 +108,8 @@ jobs:
     - run: ls -la
     - run: uname -a
     - run: whoami
-    - run: unzip Verademo-dotnet.zip
+    - run: file ./Verademo-dotnet.zip
+#    - run: unzip Verademo-dotnet.zip
     - run: curl --version
     - run: java --version
     - run: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
