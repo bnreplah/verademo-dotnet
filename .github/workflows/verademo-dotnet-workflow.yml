@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: Verademo-dotnet
-          path: "./Verademo-dotnet.zip" 
+          path: "Verademo-dotnet.zip" 
       
   security:
     needs: build
@@ -103,7 +103,7 @@ jobs:
         # Artifact name
         name: Verademo-dotnet # optional
         # Destination path
-        path: "./Verademo-dotnet.zip"  # optional
+        path: "Verademo-dotnet.zip"  # optional
    
     - run: ls -la
     - run: uname -a
@@ -114,7 +114,7 @@ jobs:
     - run: java --version
     - run: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
     - run: unzip pipeline-scan-LATEST.zip 
-    - run: java -jar pipeline-scan.jar -vid ${{ secrets.VERACODE_API_ID }} -vkey ${{ secrets.VERACODE_API_KEY }} -f  ./Verademo-dotnet.zip 
+    - run: java -jar pipeline-scan.jar -vid ${{ secrets.VERACODE_API_ID }} -vkey ${{ secrets.VERACODE_API_KEY }} -f  .\Verademo-dotnet.zip 
 
 #    - name: Veracode Pipeline-Scan
 #      # You may pin to the exact commit or the version.
