@@ -20,7 +20,7 @@ jobs:
           include-prerelease: true
       - run: mkdir ${{ github.workspace}}\myapp
       - name: Build with dotnet
-        run: dotnet build --configuration Debug
+        run: dotnet build Verademo-dotnet.sln --configuration Debug
 
       - name: dotnet publish
         run: dotnet publish -c Debug -o ${{github.workspace}}\myapp
