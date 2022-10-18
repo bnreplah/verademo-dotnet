@@ -6,29 +6,128 @@ on:
 #      - main
   workflow_dispatch:
 
+env:
+   DOTNET_VERSION: '4.5.2'
+   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  
+
 jobs:
   build:
+    name: build-and-test
     runs-on: windows-latest
-
+    # grants permissions for the artifact to be uploaded
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - uses: actions/checkout@v2
+    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can acces it and clones the repo
+      - uses: actions/checkout@v3
+      # Set up DOT.NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        #with:
+        #  dotnet-version: ${{env.DOTNET_VERSION}}
+      # Set up MSBuild and add to path  
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+        
+   
+      
+      # Set up NuGet to install NuGet dependencies
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.2
+#      - name: Navigate to Workspace
+#        run: cd $GITHUB_WORKSPACE
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3.0.2
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
-      - run: mkdir ${{ github.workspace}}\myapp
-      - name: Build with dotnet
-        run: dotnet build Verademo-dotnet.sln --configuration Debug
+      
+      # Restore dependencies to the project
+      - name: Install dependencies
+        run: dotnet restore
+      
+      # NuGet call to restore packages
+      - name: Restore Packages
+        run: nuget restore Verademo-dotnet.sln
 
-      - name: dotnet publish
-        run: dotnet publish -c Debug -o ${{github.workspace}}\myapp
+# Results in an error not finding the solution files to build off, possibly due to being --no-restore
+#      - name: Build
+#        run: dotnet build 
+#      - name: Test
+#        run: dotnet test --no-restore --verbosity normal
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{github.workspace}}/myapp
-
+         # [DEBUG]: listing directories after MSBUILD
  
+
+      # Build the solution
+      - name: Build Solution
+        run: |
+          msbuild.exe Verademo-dotnet.sln  /nologo /nr:false /p:DeployOnBuild=true /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=false /p:SkipInvalidConfigurations=true /p:PackageLocation=./.. /p:DebugSymbols=true  /p:platform="Any CPU" /p:configuration="Debug" 
+      
+
+      - name: List files in the repository and zip artifact
+        run: |
+          dir ${{ github.workspace }}
+   #       Compress-Archive -Path ${{ github.workspace }} -DestinationPath Verademo-dotnet.zip
+      - run: ls
+      
+       # Upload the artifact of the zip archive
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: Verademo-dotnet
+          path: "Verademo-dotnet.zip" 
+          
+          
+          
+      - name: Veracode Upload And Scan
+        # You may pin to the exact commit or the version.
+        # uses: veracode/veracode-uploadandscan-action@35794dab9fbcd28fac19e44963f80646b27f4a7f
+        uses: veracode/veracode-uploadandscan-action@0.2.4
+        with:
+          # appname
+          appname: Verademo-net # default is ${{ github.repository }}
+          # createprofile
+          createprofile: false # default is true
+          # filepath
+          filepath: Verademo-dotnet.zip
+          # version
+          version: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} # default is Scan from Github job: ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          # vid
+          vid: ${{secrets.VERACODE_API_ID}}
+          # vkey
+          vkey: ${{secrets.VERACODE_API_KEY}}
+          # true or false
+          createsandbox: false # optional
+          # name of the sandbox
+          sandboxname: github-verademo # optional
+          # wait X minutes for the scan to complete
+          #scantimeout: # optional
+          # modules to exclude from module selection
+          #exclude: # optional
+          # modules to include in module selection
+          #include: # optional
+          # business criticality - policy selection
+          #criticality: # optional
+          # filename pattern
+          #pattern: # optional
+          # replacement
+          #replacement: # optional
+          # specify to scan in a sandbox
+          #sandboxid: # optional
+          # All top level modules
+          #scanallnonfataltoplevelmodules: # optional
+          # platform selected modules
+          #selected: # optional
+          # selected modules like from previous scan
+          #selectedpreviously: # optional
+          # teams
+          #teams: # optional
+          # teams
+          #toplevel: # optional
+          # automatically delete the current scan if there are any errors when uploading files or starting the scan
+          deleteincompletescan: true # optional
+          # specify version of the Java API Wrapper; default is latest
+          #javawrapperversion: # optional
+          # show detailed diagnostic information, which you can use for debugging, in the output.
+          debug: true # optional
+
