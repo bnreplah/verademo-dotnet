@@ -8,19 +8,15 @@ trigger: none
    # - main
 pr: none
 
-resources:
-  repositories:
-    - repository: devops-scripts
-      type: github
-      name: dmedeiros-veracode/devops-scripts-azure-devops
-      endpoint: dmedeiros-veracode #Connection name of GitHub App. Can be name of a Service Connection to GitHub as well.
-
 pool:
   #vmImage: ubuntu-latest
   vmImage: 'windows-latest'
 
 variables:
-- group: 'Veracode Credentials' # Reference the library containing Veracode Credentials
+  group: 'Veracode Credentials' # Reference the library containing Veracode Credentials
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Debug'
 
 stages: 
 - stage: Build
@@ -30,12 +26,27 @@ stages:
     displayName: Debug Build
 
     steps:
-    - [build step goes here]
+      - task: NuGetToolInstaller@1
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: $(Build.StagingDirectory)
-        artifactName: WebApp_Debug
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+
+      - task: VSBuild@1
+        inputs:
+          solution: '$(solution)'
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          patterns: '**/*.exe,**/*.dll,**/*.pdb'
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: $(Build.StagingDirectory)
+              artifactName: WebApp_Debug
 
 - stage: Security_Testing
   jobs:       
