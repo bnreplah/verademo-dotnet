@@ -54,7 +54,7 @@ jobs:
 #        run: dotnet build 
 #      - name: Test
 #        run: dotnet test --no-restore --verbosity normal
-
+      - run: ls
          # [DEBUG]: listing directories after MSBUILD
       - name: Veracode Dependency Scanning
         # You may pin to the exact commit or the version.
