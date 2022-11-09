@@ -28,6 +28,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         #with:
         #  dotnet-version: ${{env.DOTNET_VERSION}}
+      - run: ls
       # Set up MSBuild and add to path  
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
