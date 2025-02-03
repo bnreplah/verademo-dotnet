@@ -146,4 +146,56 @@ steps:
 # Downloading and Running API Wrapper
 #################################################
 # https://docs.veracode.com/r/c_about_wrappers
+# Optionally can trigger DAST Scans as well from here or make API calls
 
+# example using DAST Essentials
+
+# - task: Bash@3
+#   env:
+#     VERACODE_API_KEY_SECRET: $(VERACODE_API_KEY)
+#     VERACODE_API_KEY_ID: $(VERACODE_API_ID)
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       pip install httpie
+#       pip install veracode-api-signing
+#       http --auth-type=veracode_hmac --check-status --ignore-stdin -o getguid.json "https://api.veracode.com/appsec/v1/applications?name=$env:APPNAME"
+#       http --auth-type=veracode_hmac --check-status --ignore-stdin -o $env:APPNAME-SBOM.json "https://api.veracode.com/srcclr/sbom/v1/targets/$(cat getguid.json | jq -r '._embedded.applications[0].guid')/cyclonedx?type=application"
+#       echo "SBOM written to $(APPNAME)-SBOM.json"
+
+# or can trigger it using the DA using the REST API:
+## ########################################################################
+## # Submitting a DAST scan from the pipeline
+## ########################################################################
+# #########################################################################
+# # Output of configuration json
+# #########################################################################
+# # The following task writes the input.json from a variable set inline to a file to then be ported to the API call
+# # Note: There is a slightly differnt call, and possibly some additonal fields that are needed when updating a preexisting DAST scan
+# # Note: It is also important to note that the format for the API Scans JSON is different than that of the Web Application Scans
+# # Documentation: 
+# #   https://docs.veracode.com/r/c_dynamic_intro
+# #   Updating a DAST scan: 
+- task: PowerShell@2
+  displayName: Veracode DAST Configuration JSON
+  inputs:
+    targetType: 'inline'
+    script: |
+      $strB = '{ "name": "Verademo-DA006",  "scans": [ { "scan_config_request": { "target_url": { "url": "http://verademo.bhalpern.vuln.sa.veracode.io/verademo"}, "auth_configuration": { "authentications": { "AUTO": { "username": "$(USERNAME)", "password": "$(PASS)", "authtype": "AUTO"}}}}}],"schedule": {"now": true,"duration": {"length": 1,"unit": "DAY"}}}'        
+      Write-Output $strB | Out-file -FilePath ./input.json
+      ls
+      python --version
+      python -m pip install --upgrade pip wheel
+      python -m pip install httpie
+      git clone https://github.com/veracode/veracode-python-hmac-example.git
+      cd veracode-python-hmac-example
+      pip install -r requirements.txt
+      
+      #$str = '{"name": "Verademo-DA006", "schedule": { "duration": { "length": 1, "unit": "DAY" }, "scheduled": true, "now": true } }' 
+      #Get-Content input.json |  http --auth-type=veracode_hmac PUT "https://api.veracode.com/was/configservice/v1/analyses/$(ANALYSIS_ID)?method=patch" 
+
+# #########################################################################
+# # Downloading and installing HTTPIE for HMAC REST Requests
+# #########################################################################
+# # HTTPIE documentation: https://httpie.io/docs/cli/universal
+# # Veracode Documentation: https://docs.veracode.com/r/c_httpie_tool
