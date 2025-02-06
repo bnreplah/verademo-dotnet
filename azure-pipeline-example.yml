@@ -105,6 +105,7 @@ steps:
 ########################################################
 # https://docs.veracode.com/r/Veracode_SCA_Agent_Commands
 # https://docs.veracode.com/r/c_sc_ci_script
+# Note this is using the SCA Agent Based Org Agent
 - task: PowerShell@2
   displayName: Veracode SCA Scanner
   continueOnError: true
